@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <link rel="icon" href="data:,">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obligatorio TDPDM: Elianna y Octavio</title>
+
+    <!-- OnsenUi -->
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+
+    <!-- leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+    <!-- nuestras -->
+    <script type="text/javascript" src="js/jQuery.js"></script>
+    <script type="text/javascript" src="js/miCodigo.js"></script>
+    <script type="text/javascript" src="js/clases.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+
+    <script src="cordova.jsb   "></script>
+</head>
+
+<body>
+    <!-- Spinner -->
+    <ons-modal id="spinnerModal">
+        <div style="text-align: center;">
+            <p>
+                <ons-icon icon="md-spinner" size="28px" spin></ons-icon>
+            </p>
+        </div>
+    </ons-modal>
+
+    <!-- Navegador -->
+    <ons-splitter>
+        <ons-splitter-side id="menu" side="left" width="220px" collapse swipeable>
+            <ons-page>
+                <ons-list>
+                    <ons-list-header id="usuarioLogueado"></ons-list-header>
+                    <ons-list-item id="item0" onclick="navegar('home', false)" tappeable>Home</ons-list-item>
+                    <ons-list-item id="item1" onclick="verItem(1)" tappeable>
+                        <ons-icon icon="fa-sign-in"></ons-icon> Iniciar Sesión
+                    </ons-list-item>
+                    <ons-list-item id="item2" onclick="verItem(2)" tappeable>
+                        <ons-icon icon="fa-file-signature"></ons-icon> Registrar
+                    </ons-list-item>
+                    <ons-list-item id="item3" onclick="verItem(3)" tappeable>
+                        <ons-icon icon="fa-list-ol"> </ons-icon> Catálogo
+                    </ons-list-item>
+                    <ons-list-item id="item4" onclick="verItem(4)" tappeable>
+                        <ons-icon icon="fa-heart"> </ons-icon> Favoritos
+                    </ons-list-item>
+                    <ons-list-item id="item5" onclick="verItem(5)" tappeable>
+                        <ons-icon icon="fa-truck"> </ons-icon> Pedidos
+                    </ons-list-item>
+                </ons-list>
+            </ons-page>
+        </ons-splitter-side>
+        <ons-splitter-content id="content">
+            <ons-navigator swipeable id="myNavigator" page="home.html"></ons-navigator>
+        </ons-splitter-content>
+    </ons-splitter>
+
+    <!-------------- Templates --------------->
+    <!-- HOME -->
+    <template id="home.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button onclick="abrirMenu()">
+                        <ons-icon icon="md-menu"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center">
+                    Home
+                </div>
+                <div class="right">
+                    <ons-toolbar-button onclick="cerrarSesion()" style="font-size:medium;">
+                        <ons-icon icon="fa-sign-out"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+            <ons-card>
+                <div style="text-align: center; margin-top: 30px;">
+                    <h2>Bienvenido a la tienda de productos de Elianna y Octavio!</h2>
+                    <h3>Tenemos variedades de productos y muchas sucursales donde levantarlos!</h3>
+                </div>
+            </ons-card>
+        </ons-page>
+    </template>
+
+    <!-- Login -->
+    <template id="paginaItem1.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button onclick="abrirMenu()">
+                        <ons-icon icon="md-menu"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center" style="text-align: center;">
+                    Inicio de Sesión
+                </div>
+            </ons-toolbar>
+            <ons-card>
+                <div style="text-align: center; margin-top: 30px;">
+                    <p>
+                        <ons-input id="emailLogin" modifier="underbar" placeholder="Email" float></ons-input>
+                    </p>
+                    <p>
+                        <ons-input id="contraseñaLogin" modifier="underbar" type="password" style="width: 145px;"
+                            placeholder="Contraseña" float></ons-input>
+                        <ons-switch id="mostrarSwitch" onclick="mostrarContrasena()"></ons-switch>
+                    </p>
+                    <p style="margin-top: 30px;">
+                        <ons-button onclick="loginIniciarSesionHandler()" id="btnIngresar">Ingresar</ons-button>
+                    </p>
+                    <p>
+                        ¿Aún no está registrado?
+                        <br><a href="#" onclick="verItem(2)">Regístrese aquí</a>
+                    </p>
+            </ons-card>
+        </ons-page>
+    </template>
+
+    <!-- Registro -->
+    <template id="paginaItem2.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button onclick="abrirMenu()">
+                        <ons-icon icon="md-menu"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center" style="text-align: center;">
+                    Registro
+                </div>
+            </ons-toolbar>
+            <ons-card>
+                <div style="text-align: center; margin-top: 30px;">
+                    <p>
+                        <ons-input id="correoRegistro" modifier="underbar" placeholder="Correo" float></ons-input>
+                    </p>
+                    <p>
+                        <ons-input id="contraseñaRegistro" modifier="underbar" type="password" placeholder="Contraseña"
+                            float></ons-input>
+                    </p>
+                    <p>
+                        <ons-input id="verificarContraseñaRegistro" modifier="underbar" type="password"
+                            placeholder="Verifique la contraseña" float></ons-input>
+                    </p>
+                    <p>
+                        <ons-input id="nombreRegistro" modifier="underbar" placeholder="Nombre" float></ons-input>
+                    </p>
+                    <p>
+                        <ons-input id="apellidoRegistro" modifier="underbar" placeholder="Apellido" float></ons-input>
+                    </p>
+                    <p>
+                        <ons-input id="direccionRegistro" modifier="underbar" placeholder="Dirección (Ej.: Calle)"
+                            style="width:150px;" float></ons-input>
+                        <ons-input id="direccionNumeroRegistro" modifier="underbar" placeholder="1234"
+                            style="width:40px;" type="number" float></ons-input>
+                    </p>
+                    <p style="margin-top: 30px;">
+                        <ons-button onclick="registroRegistrarseHandler()" id="btnIngresar">Registrar</ons-button>
+                    </p>
+                    <p>
+                        ¿Ya está registrado?
+                        <br><a href="#" onclick="verItem(1)">Ingrese aquí</a>
+                    </p>
+                </div>
+            </ons-card>
+        </ons-page>
+    </template>
+
+    <!-- Catálogo -->
+    <template id="paginaItem3.html">
+        <ons-page>
+            <script>
+                ons.getScriptPage().onShow = cargarQr;  
+            </script>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button onclick="abrirMenu()">
+                        <ons-icon icon="md-menu"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center" style="text-align: center;">
+                    Catálogo
+                </div>
+                <div class="right">
+                    <ons-toolbar-button onclick="cerrarSesion()" style="font-size:medium;">
+                        <ons-icon icon="fa-sign-out"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+            <ons-fab position="bottom right">
+                <ons-icon icon="arrow-left" onclick="navegarAtras()"> </ons-icon>
+            </ons-fab>
+            <ons-card>
+                <div class="title">
+                    <center>
+                        Productos
+                    </center>
+                    <p style="text-align: center; margin-top: 10px;">
+                        <ons-search-input id="txtSearch" placeholder="Buscar por nombre" onchange="filtrarProductos()">
+                        </ons-search-input>
+                        <ons-button id="btnBorrarFiltro" onclick="borrarFiltro()">Borrar</ons-button>
+
+                        <ons-button style=" margin-bottom: -14px;" modifier="quiet" onclick="">
+                            <ons-icon style="font-size: 30px;  color: #2979ff;" icon="md-camera" onclick="irAlScan()">
+                            </ons-icon>
+                            <ons-icon style="font-size: 30px;  color: red;" icon="md-camera" onclick="irAlFalsoScan()">
+                            </ons-icon>
+                        </ons-button>
+                    </p>
+
+                </div>
+                <ons-list id="productos-list"></ons-list>
+                <div class="content" id="contentCatalogo" nroItem="3">
+                    <ons-list class="tablaTbodyProductos">
+
+                    </ons-list>
+
+                </div>
+            </ons-card>
+        </ons-page>
+    </template>
+
+    <!-- Favoritos -->
+    <template id="paginaItem4.html">
+        <ons-page>
+            <script>
+                ons.getScriptPage().onShow = function () { cargarListadoFavoritos(4); };
+            </script>
+            <ons-toolbar>
+
+                <div class="left">
+                    <ons-toolbar-button onclick="abrirMenu()">
+                        <ons-icon icon="md-menu"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center" style="text-align: center;">
+                    Favoritos
+                </div>
+                <div class="right">
+                    <ons-toolbar-button onclick="cerrarSesion()" style="font-size:medium;">
+                        <ons-icon icon="fa-sign-out"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+            <ons-card>
+                <div class="content">
+                    <ons-list class="tablaTbodyProductos">
+
+                    </ons-list>
+                </div>
+            </ons-card>
+            <ons-fab position="bottom right">
+                <ons-icon icon="arrow-left" onclick="navegarAtras()"> </ons-icon>
+            </ons-fab>
+        </ons-page>
+    </template>
+
+    <!--Pedidos 555555555555555555 -->
+    <template id="paginaItem5.html">
+        <ons-page>
+            <script>
+                ons.getScriptPage().onShow = function () { cargarPedidosAPI() };
+            </script>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button onclick="abrirMenu()">
+                        <ons-icon icon="md-menu"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center" style="text-align: center;">
+                    Pedidos
+                </div>
+                <div class="right">
+                    <ons-toolbar-button onclick="cerrarSesion()" style="font-size:medium;">
+                        <ons-icon icon="fa-sign-out"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+            <ons-fab position="bottom right">
+                <ons-icon icon="arrow-left" onclick="navegarAtras()"> </ons-icon>
+            </ons-fab>
+            <ons-card>
+                <div class="title">
+                    Pedidos realizados
+                </div>
+                <div id="verPedidos" class="content">
+                    <ons-list class="tablaTbodyPedidos">
+                        <div id="divComentario">
+                        </div>
+                    </ons-list>
+                </div>
+            </ons-card>
+        </ons-page>
+    </template>
+
+    <!--Producto Individual detalle 6666666666666-->
+    <template id="paginaItem6.html">
+        <ons-page>
+            <ons-toolbar>
+                <div class="left">
+                    <ons-toolbar-button onclick="abrirMenu()">
+                        <ons-icon icon="md-menu"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+                <div class="center" id="tituloDetalleProductoIndividual" style="text-align: center;">
+                    Detalle de producto
+                </div>
+                <div class="right">
+                    <ons-toolbar-button onclick="cerrarSesion()" style="font-size:medium;">
+                        <ons-icon icon="fa-sign-out"></ons-icon>
+                    </ons-toolbar-button>
+                </div>
+            </ons-toolbar>
+            <ons-fab position="bottom right">
+                <ons-icon icon="arrow-left" onclick="navegarAtras()"> </ons-icon>
+            </ons-fab>
+            <ons-card>
+                <div class="title">
+                    <h3 id="tituloDetalleProducto"></h3>
+                </div>
+
+                <div class="content" id="pDetalleProductoIndividual">
+                    <div id="listaEtiquetasDetalle">
+                    </div>
+                </div>
+                <ons-button id="btnComprarProductoIndividual">
+                    Comprar</ons-button>
+            </ons-card>
+        </ons-page>
+    </template>
+
+    <!--Hacer Nuevo Pedido -->
+    <template id="paginaItem7.html">
+        <ons-page>
+            <script>
+
+                ons.getScriptPage().onShow = function () { cargarDetalleCompra(myNavigator.topPage.data) };
+                ons.getScriptPage().onDestroy = function () { cargarPedidosAPI };
+            </script>
+            <ons-fab position="bottom right">
+                <ons-icon icon="arrow-left" onclick="navegarAtras()"></ons-icon>
+            </ons-fab>
+            <ons-card>
+                <div class="content" id="productoSeleccionado">
+
+                </div>
+                <ons-input id="inputCantidad" modifier="underbar" placeholder="Cantidad" type="number" float
+                    style="width: 120px;" onchange="calcularTotal(myNavigator.topPage.data)">
+                </ons-input><br>
+                <p id="pedirTotal">Para mostrar el total ingrese una cantidad.</p>
+                <p id="pCantidadTotal"></p>
+
+                <!-- sucursales -->
+                <div>
+                    <label for="">Seleccione una sucursal:</label>
+                    <select name="sucursalesCompra" id="selectSucursalCompra">
+                    </select>
+                    <input type="button" value="Buscar" id="btnBuscarSucursal" onclick="centrarEnSucursal()"><br>
+                </div><br>
+
+                <!-- MAPA -->
+                <div>
+                    <center>
+                        <div id="contenedorDeMapa" style="width: 90%; height: 300px;"></div>
+                    </center>
+                    <label for="">O busque una dirección:</label>
+                    <input type="text" placeholder="Ingrese una dirección" id="inputDireccionBuscada">
+                    <input type="button" value="Buscar" id="btnBuscarDireccion"><br>
+                    <input type="button" value="Centrar en usuario" id="btnDibujarPosicionDelUsuario">
+                </div>
+                <ons-button class="btnConfirmarCompra" onclick="confirmar()">Confirmar compra</ons-button>
+
+            </ons-card>
+        </ons-page>
+    </template>
+
+    <!-- QR PAGE -->
+    <template id="qrPage.html">
+        <ons-page id="qrPage">
+            <script>
+                // Script para lanzar la función de scanear.
+                ons.getScriptPage().onInit = escanear;
+                // Sobrescribo el back button para esconder el escaner y mandar a la pantalla anterior el valor ''.
+                document.querySelector('ons-back-button').onClick = function (event) {
+                    if (window.QRScanner) {
+                        QRScanner.hide();
+                    }
+                    myNavigator.popPage({ data: { scanText: '' } });
+                };
+            </script>
+            <ons-toolbar>
+                <div class="center">Scan</div>
+            </ons-toolbar>
+            <ons-fab position="bottom right">
+                <ons-icon icon="arrow-left" onclick="navegarAtras()"></ons-icon>
+            </ons-fab>
+        </ons-page>
+    </template>
+
+
+
+
+
+
+
+    <!-- FALSO SCAN -->
+    <template id="falsoScan.html">
+        <ons-page id="falsoScan">
+            <script>
+                // Sobrescribo el back button para esconder el escaner y mandar a la pantalla anterior el valor ''.
+                document.querySelector('ons-back-button').onClick = function (event) {
+                    if (window.QRScanner) {
+                        QRScanner.hide();
+                    }
+                };
+            </script>
+            <ons-toolbar>
+                <div class="center">Scan</div>
+            </ons-toolbar>
+            <ons-fab position="bottom right">
+                <ons-icon icon="arrow-left" onclick="navegarAtras()"> </ons-icon>
+            </ons-fab>
+            <p>Simularemos que se escaneó un código QR y que nos devuelve la URL:
+                http://ec2-54-210-28-85.compute-1.amazonaws.com:3000/api/productos?codigo=PRCODE001</p>
+            <ons-button modifier="large" onclick="falsoScan()">
+                Ejecutar falso escaner
+            </ons-button>
+        </ons-page>
+    </template>
+
+    <!-- OFF LINE -->
+    <template id="offline.html">
+        <ons-page id="offline">
+            <div style="height: 100%; display: flex;">
+                <img src="img/no-internet.png" style="width: 75%; display: block; margin: auto;">
+            </div>
+        </ons-page>
+    </template>
+
+
+
+
+</body>
+
+</html>
